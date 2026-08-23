@@ -1,0 +1,74 @@
+<Page x:Class="YFToolbox.Features.Files.Views.BatchRenameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
+             AllowDrop="True"
+             Drop="OnDrop">
+    <Grid Margin="32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="30" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.BatchRename}" />
+        <Grid Grid.Row="1" Margin="0,20,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="0,0,12,0">
+                <TextBlock Text="{x:Static loc:AppStrings.Prefix}" />
+                <TextBox Margin="0,6,0,0" Text="{Binding Prefix, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                <TextBlock Text="{x:Static loc:AppStrings.Suffix}" />
+                <TextBox Margin="0,6,0,0" Text="{Binding Suffix, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Margin="0,0,12,0">
+                <TextBlock Text="{x:Static loc:AppStrings.ReplaceText}" />
+                <TextBox Margin="0,6,0,0" Text="{Binding Find, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Column="3">
+                <TextBlock Text="{x:Static loc:AppStrings.ReplaceWith}" />
+                <TextBox Margin="0,6,0,0" Text="{Binding Replace, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="0,0,0,12" Orientation="Horizontal">
+                <Button Margin="0,0,12,0" Padding="14,7" Click="OnChooseFiles" Content="{x:Static loc:AppStrings.ChooseFiles}" />
+                <CheckBox Margin="0,0,16,0" VerticalAlignment="Center" IsChecked="{Binding AddNumbering}" Content="{x:Static loc:AppStrings.Numbering}" />
+                <TextBlock Margin="0,0,6,0" VerticalAlignment="Center" Text="{x:Static loc:AppStrings.StartNumber}" />
+                <TextBox Width="55" Margin="0,0,16,0" Text="{Binding StartNumber}" />
+                <TextBlock Margin="0,0,6,0" VerticalAlignment="Center" Text="{x:Static loc:AppStrings.LeadingZeros}" />
+                <TextBox Width="55" Margin="0,0,16,0" Text="{Binding Padding}" />
+                <CheckBox VerticalAlignment="Center" IsChecked="{Binding PreserveExtension}" Content="{x:Static loc:AppStrings.PreserveExtension}" />
+            </StackPanel>
+            <DataGrid Grid.Row="1" ItemsSource="{Binding PreviewItems}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="{x:Static loc:AppStrings.Original}" Binding="{Binding SourceName}" />
+                    <DataGridTextColumn Width="*" Header="{x:Static loc:AppStrings.NewName}" Binding="{Binding TargetName}" />
+                    <DataGridTextColumn Width="2*" Header="{x:Static loc:AppStrings.Validation}" Binding="{Binding Error}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="3" Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock VerticalAlignment="Center" Text="{Binding Status}" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding ClearCommand}" Content="{x:Static loc:AppStrings.Clear}" />
+                <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding BuildPreviewCommand}" Content="{x:Static loc:AppStrings.Preview}" />
+                <Button Padding="18,7" Command="{Binding ApplyCommand}" Content="{x:Static loc:AppStrings.ApplyRename}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

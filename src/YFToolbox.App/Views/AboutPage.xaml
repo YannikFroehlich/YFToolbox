@@ -1,0 +1,26 @@
+<Page x:Class="YFToolbox.App.Views.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core">
+    <Grid Margin="32">
+        <StackPanel MaxWidth="620" HorizontalAlignment="Left">
+            <TextBlock FontSize="34" FontWeight="SemiBold" Text="YF Toolbox" />
+            <TextBlock Margin="0,8,0,28" FontSize="16" Opacity="0.72" Text="{x:Static loc:AppStrings.AboutDescription}" />
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                <TextBlock Margin="0,6" Text="{x:Static loc:AppStrings.Version}" />
+                <TextBlock Grid.Column="1" Margin="0,6" FontWeight="SemiBold" Text="{Binding Version}" />
+                <TextBlock Grid.Row="1" Margin="0,6" Text="{x:Static loc:AppStrings.Commit}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,6" Text="{Binding Commit}" />
+                <TextBlock Grid.Row="2" Margin="0,6" Text="{x:Static loc:AppStrings.Channel}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,6" Text="{Binding Channel}" />
+                <TextBlock Grid.Row="3" Margin="0,6" Text="{x:Static loc:AppStrings.Build}" />
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,6" Text="{Binding BuildTime}" />
+            </Grid>
+            <Border Margin="0,28,0,0" Padding="18" BorderBrush="#405E7184" BorderThickness="1" CornerRadius="8">
+                <TextBlock TextWrapping="Wrap" Text="{x:Static loc:AppStrings.AboutNotice}" />
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YFToolbox.Core\YFToolbox.Core.csproj" />
+    <ProjectReference Include="..\YFToolbox.Application\YFToolbox.Application.csproj" />
+    <ProjectReference Include="..\YFToolbox.Infrastructure\YFToolbox.Infrastructure.csproj" />
+    <ProjectReference Include="..\YFToolbox.Features.Images\YFToolbox.Features.Images.csproj" />
+    <ProjectReference Include="..\YFToolbox.Features.Files\YFToolbox.Features.Files.csproj" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="WPF-UI" />
+    <PackageReference Include="WPF-UI.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

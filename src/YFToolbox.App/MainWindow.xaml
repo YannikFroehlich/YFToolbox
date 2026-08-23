@@ -1,0 +1,38 @@
+<ui:FluentWindow x:Class="YFToolbox.App.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
+                 xmlns:views="clr-namespace:YFToolbox.App.Views"
+                 xmlns:imageViews="clr-namespace:YFToolbox.Features.Images.Views;assembly=YFToolbox.Features.Images"
+                 xmlns:fileViews="clr-namespace:YFToolbox.Features.Files.Views;assembly=YFToolbox.Features.Files"
+                 Title="YF Toolbox"
+                 Width="1180"
+                 Height="760"
+                 MinWidth="880"
+                 MinHeight="600"
+                 WindowStartupLocation="CenterScreen"
+                 WindowBackdropType="Mica">
+    <ui:NavigationView x:Name="RootNavigationView"
+                       PaneTitle="YF Toolbox"
+                       OpenPaneLength="240"
+                       IsBackButtonVisible="Collapsed"
+                       PaneDisplayMode="Left">
+        <ui:NavigationView.MenuItems>
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Home}" Icon="{ui:SymbolIcon Home24}"
+                                   TargetPageType="{x:Type views:HomePage}" />
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Converter}" Icon="{ui:SymbolIcon Image24}"
+                                   TargetPageType="{x:Type imageViews:ImageConverterView}" />
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.BatchRename}" Icon="{ui:SymbolIcon Rename24}"
+                                   TargetPageType="{x:Type fileViews:BatchRenameView}" />
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.FileUtilities}" Icon="{ui:SymbolIcon DocumentToolbox24}"
+                                   TargetPageType="{x:Type fileViews:FileUtilitiesView}" />
+        </ui:NavigationView.MenuItems>
+        <ui:NavigationView.FooterMenuItems>
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Settings}" Icon="{ui:SymbolIcon Settings24}"
+                                   TargetPageType="{x:Type views:SettingsPage}" />
+            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.About}" Icon="{ui:SymbolIcon Info24}"
+                                   TargetPageType="{x:Type views:AboutPage}" />
+        </ui:NavigationView.FooterMenuItems>
+    </ui:NavigationView>
+</ui:FluentWindow>

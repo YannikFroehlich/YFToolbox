@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+    tags-ignore:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yftoolbox-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conventional-title:
+    name: Conventional PR title
+    if: github.event_name == 'pull_request'
+    runs-on: windows-2025
+    steps:
+      - name: Validate title
+        shell: pwsh
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ($env:PR_TITLE -notmatch '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9._/-]+\))?!?: .+') {
+            throw "PR title must follow Conventional Commits, for example: feat(images): add ico conversion"
+          }
+
+  build:
+    name: Build
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'NuGet.Config') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore YFToolbox.sln --configfile NuGet.Config
+
+      - name: Build
+        run: dotnet build YFToolbox.sln --configuration Debug --no-restore
+
+      - name: Check vulnerable dependencies
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts/reports -Force | Out-Null
+          $report = dotnet list YFToolbox.sln package --vulnerable --include-transitive --format json --output-version 1 --configfile NuGet.Config
+          if ($LASTEXITCODE -ne 0) { throw "dotnet list package failed." }
+          $report | Set-Content -LiteralPath artifacts/reports/vulnerabilities.json -Encoding utf8NoBOM
+          ./build/Test-Vulnerabilities.ps1 -ReportPath artifacts/reports/vulnerabilities.json
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Cache NuGet packages
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'NuGet.Config') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+      - name: Restore
+        run: dotnet restore YFToolbox.sln --configfile NuGet.Config
+      - name: Core unit tests
+        run: dotnet test tests/YFToolbox.Core.Tests/YFToolbox.Core.Tests.csproj --configuration Debug --no-restore
+      - name: Feature unit tests
+        run: dotnet test tests/YFToolbox.Features.Tests/YFToolbox.Features.Tests.csproj --configuration Debug --no-restore
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Cache NuGet packages
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'NuGet.Config') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+      - name: Restore
+        run: dotnet restore YFToolbox.sln --configfile NuGet.Config
+      - name: Run integration tests
+        run: dotnet test tests/YFToolbox.IntegrationTests/YFToolbox.IntegrationTests.csproj --configuration Debug --no-restore
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: moderate

@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <TreatWarningsAsErrors Condition="'$(CI)' == 'true'">true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <NoWarn>$(NoWarn);CA1001;CA1068;CA1305;CA1711;CA1848;CA1859;CA1873</NoWarn>
+    <Version Condition="'$(Version)' == ''">0.1.0-dev</Version>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">0.1.0.0</AssemblyVersion>
+    <FileVersion Condition="'$(FileVersion)' == ''">0.1.0.0</FileVersion>
+    <InformationalVersion Condition="'$(InformationalVersion)' == ''">0.1.0-dev+local</InformationalVersion>
+    <Authors>Yannik Froehlich</Authors>
+    <Company>YF Toolbox</Company>
+    <Product>YF Toolbox</Product>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="CommitSha" Value="$(SourceRevisionId)" Condition="'$(SourceRevisionId)' != ''" />
+    <AssemblyMetadata Include="BuildTimeUtc" Value="$(BuildTimeUtc)" Condition="'$(BuildTimeUtc)' != ''" />
+  </ItemGroup>
+</Project>

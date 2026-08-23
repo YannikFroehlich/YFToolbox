@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="AppName" xml:space="preserve"><value>YF Toolbox</value></data>
+  <data name="Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Converter" xml:space="preserve"><value>Converter</value></data>
+  <data name="Images" xml:space="preserve"><value>Images</value></data>
+  <data name="BatchRename" xml:space="preserve"><value>Batch rename</value></data>
+  <data name="FileUtilities" xml:space="preserve"><value>File utilities</value></data>
+  <data name="Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="About" xml:space="preserve"><value>About</value></data>
+  <data name="Files" xml:space="preserve"><value>FILES</value></data>
+  <data name="Media" xml:space="preserve"><value>MEDIA</value></data>
+  <data name="DropFilesHere" xml:space="preserve"><value>Drop files here</value></data>
+  <data name="ChooseFiles" xml:space="preserve"><value>Choose files</value></data>
+  <data name="QuickTools" xml:space="preserve"><value>Quick tools</value></data>
+  <data name="RecentFiles" xml:space="preserve"><value>Detected files</value></data>
+  <data name="NoFiles" xml:space="preserve"><value>No files selected yet.</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="TargetFormat" xml:space="preserve"><value>Target format</value></data>
+  <data name="OutputFolder" xml:space="preserve"><value>Output folder</value></data>
+  <data name="Width" xml:space="preserve"><value>Width</value></data>
+  <data name="Height" xml:space="preserve"><value>Height</value></data>
+  <data name="Quality" xml:space="preserve"><value>Quality</value></data>
+  <data name="Rotation" xml:space="preserve"><value>Rotation</value></data>
+  <data name="Flip" xml:space="preserve"><value>Flip</value></data>
+  <data name="PreserveMetadata" xml:space="preserve"><value>Preserve metadata</value></data>
+  <data name="AllowUpscale" xml:space="preserve"><value>Allow upscale</value></data>
+  <data name="Prefix" xml:space="preserve"><value>Prefix</value></data>
+  <data name="Suffix" xml:space="preserve"><value>Suffix</value></data>
+  <data name="ReplaceText" xml:space="preserve"><value>Replace text</value></data>
+  <data name="ReplaceWith" xml:space="preserve"><value>Replace with</value></data>
+  <data name="StartNumber" xml:space="preserve"><value>Start number</value></data>
+  <data name="LeadingZeros" xml:space="preserve"><value>Leading zeros</value></data>
+  <data name="Preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Original" xml:space="preserve"><value>Original</value></data>
+  <data name="NewName" xml:space="preserve"><value>New name</value></data>
+  <data name="ApplyRename" xml:space="preserve"><value>Apply rename</value></data>
+  <data name="CalculateHash" xml:space="preserve"><value>Calculate hash</value></data>
+  <data name="Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="Theme" xml:space="preserve"><value>Theme</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="SystemValue" xml:space="preserve"><value>System</value></data>
+  <data name="Light" xml:space="preserve"><value>Light</value></data>
+  <data name="Dark" xml:space="preserve"><value>Dark</value></data>
+  <data name="German" xml:space="preserve"><value>German</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="Version" xml:space="preserve"><value>Version</value></data>
+  <data name="Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="Channel" xml:space="preserve"><value>Channel</value></data>
+  <data name="PrivacyNotice" xml:space="preserve"><value>Everything stays on this device. No telemetry, no uploads.</value></data>
+  <data name="Ready" xml:space="preserve"><value>Ready</value></data>
+  <data name="Processing" xml:space="preserve"><value>Processing…</value></data>
+  <data name="Done" xml:space="preserve"><value>Done</value></data>
+  <data name="Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="SelectAtLeastOneFile" xml:space="preserve"><value>Select at least one file.</value></data>
+  <data name="UnsupportedFile" xml:space="preserve"><value>This file type is not supported by this tool.</value></data>
+  <data name="SettingsSaved" xml:space="preserve"><value>Settings saved.</value></data>
+  <data name="RestartForLanguage" xml:space="preserve"><value>Restart the app to apply the language everywhere.</value></data>
+  <data name="HomeSubtitle" xml:space="preserve"><value>Convert, rename, inspect, and hash files locally.</value></data>
+  <data name="FoldersNotProcessed" xml:space="preserve"><value>Folders are intentionally not processed in V1.</value></data>
+  <data name="RenameQuickDescription" xml:space="preserve"><value>Preview and safe two-phase rename</value></data>
+  <data name="UtilitiesQuickDescription" xml:space="preserve"><value>File info · SHA-256 · MD5</value></data>
+  <data name="AboutDescription" xml:space="preserve"><value>A local-first Windows 11 file utility.</value></data>
+  <data name="AboutNotice" xml:space="preserve"><value>YF Toolbox is MIT licensed. No telemetry is collected and no local file data is transmitted. Third-party license notices are included with every build.</value></data>
+  <data name="Build" xml:space="preserve"><value>Build</value></data>
+  <data name="CollisionPolicy" xml:space="preserve"><value>Collision policy</value></data>
+  <data name="ImageDefaults" xml:space="preserve"><value>Image defaults</value></data>
+  <data name="PathlessHistory" xml:space="preserve"><value>Pathless history (max. 100 entries)</value></data>
+  <data name="LockAspectRatio" xml:space="preserve"><value>Lock aspect ratio</value></data>
+  <data name="FlipHorizontal" xml:space="preserve"><value>Flip horizontally</value></data>
+  <data name="FlipVertical" xml:space="preserve"><value>Flip vertically</value></data>
+  <data name="ConfirmLargeImages" xml:space="preserve"><value>Confirm large images</value></data>
+  <data name="Numbering" xml:space="preserve"><value>Numbering</value></data>
+  <data name="PreserveExtension" xml:space="preserve"><value>Preserve extension</value></data>
+  <data name="Validation" xml:space="preserve"><value>Validation</value></data>
+  <data name="Md5Legacy" xml:space="preserve"><value>MD5 (legacy / compatibility)</value></data>
+  <data name="ChooseAFile" xml:space="preserve"><value>Choose a file</value></data>
+  <data name="WidthHeightPositive" xml:space="preserve"><value>Width and height must be positive whole numbers.</value></data>
+  <data name="ResolvePreviewErrors" xml:space="preserve"><value>Resolve all preview errors before renaming.</value></data>
+  <data name="ExtensionMismatch" xml:space="preserve"><value>Extension/content mismatch</value></data>
+  <data name="FilesReadyFormat" xml:space="preserve"><value>{0} file(s) ready</value></data>
+  <data name="FilesInspectedFormat" xml:space="preserve"><value>{0} file(s) inspected</value></data>
+  <data name="InvalidRowsFormat" xml:space="preserve"><value>{0} invalid row(s)</value></data>
+  <data name="ResultsSummaryFormat" xml:space="preserve"><value>{0} succeeded, {1} failed, {2} skipped</value></data>
+  <data name="AllFilesFilter" xml:space="preserve"><value>All files|*.*</value></data>
+  <data name="ImagesFilter" xml:space="preserve"><value>Images|*.png;*.jpg;*.jpeg;*.webp;*.bmp;*.ico|All files|*.*</value></data>
+  <data name="DuplicateTargetName" xml:space="preserve"><value>Duplicate target name.</value></data>
+  <data name="TargetExists" xml:space="preserve"><value>A file with the target name already exists.</value></data>
+  <data name="AllPreviewRowsValid" xml:space="preserve"><value>All preview rows must be valid before renaming.</value></data>
+  <data name="RollbackFailedFormat" xml:space="preserve"><value>Rollback failed for '{0}': {1}</value></data>
+  <data name="TargetNameEmpty" xml:space="preserve"><value>The target name is empty.</value></data>
+  <data name="TargetNameEnding" xml:space="preserve"><value>Windows file names cannot end with a space or period.</value></data>
+  <data name="InvalidTargetCharacters" xml:space="preserve"><value>The target name contains invalid characters.</value></data>
+  <data name="ReservedTargetName" xml:space="preserve"><value>The target name is reserved by Windows.</value></data>
+  <data name="TargetPathTooLong" xml:space="preserve"><value>The target path or file name is too long.</value></data>
+  <data name="InputChanged" xml:space="preserve"><value>The source file changed after inspection.</value></data>
+  <data name="InvalidImageOptions" xml:space="preserve"><value>Image conversion options are invalid.</value></data>
+  <data name="LargeImageConfirmation" xml:space="preserve"><value>This image exceeds the safe decoding budget. Confirm large-image processing first.</value></data>
+  <data name="AnimatedWebpUnsupported" xml:space="preserve"><value>Animated WebP images are not supported in this release.</value></data>
+  <data name="CopyFileName" xml:space="preserve"><value>Copy file name</value></data>
+  <data name="CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="OutputMode" xml:space="preserve"><value>Output mode</value></data>
+  <data name="CentralFolder" xml:space="preserve"><value>Central output folder</value></data>
+  <data name="SourceFolder" xml:space="preserve"><value>Source folder</value></data>
+  <data name="CreateUnique" xml:space="preserve"><value>Create unique name</value></data>
+  <data name="Skip" xml:space="preserve"><value>Skip</value></data>
+  <data name="Overwrite" xml:space="preserve"><value>Overwrite explicitly</value></data>
+  <data name="Small" xml:space="preserve"><value>Small</value></data>
+  <data name="Balanced" xml:space="preserve"><value>Balanced</value></data>
+  <data name="High" xml:space="preserve"><value>High</value></data>
+  <data name="Ask" xml:space="preserve"><value>Ask</value></data>
+  <data name="CollisionPromptFormat" xml:space="preserve"><value>'{0}' already exists. Yes overwrites it, No creates a unique name, and Cancel skips this file.</value></data>
+  <data name="CollisionPromptTitle" xml:space="preserve"><value>Output conflict</value></data>
+  <data name="FileSkipped" xml:space="preserve"><value>The file was skipped.</value></data>
+  <data name="OperationCancelled" xml:space="preserve"><value>The operation was cancelled.</value></data>
+  <data name="JpegTransparencyWarning" xml:space="preserve"><value>JPEG has no transparency. Transparent pixels will be composed on white.</value></data>
+  <data name="CorruptImage" xml:space="preserve"><value>The image is damaged or incomplete.</value></data>
+  <data name="ToolBatchRename" xml:space="preserve"><value>Batch rename</value></data>
+  <data name="ToolFileHash" xml:space="preserve"><value>File info and hashes</value></data>
+  <data name="ToolImageConverter" xml:space="preserve"><value>Image converter</value></data>
+  <data name="InsufficientDiskSpace" xml:space="preserve"><value>There is not enough free space for the temporary and final output.</value></data>
+  <data name="RetryFailed" xml:space="preserve"><value>Retry failed</value></data>
+</root>
