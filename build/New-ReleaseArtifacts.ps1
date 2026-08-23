@@ -4,7 +4,6 @@ param(
     [Parameter(Mandatory)] [string]$Version,
     [Parameter(Mandatory)] [string]$Repository,
     [Parameter(Mandatory)] [string]$SourceSha,
-    [Parameter(Mandatory)] [string]$PackageIdentity,
     [Parameter(Mandatory)] [string]$DependencyJson,
     [Parameter(Mandatory)] [string]$BuildTimeUtc,
     [Parameter(Mandatory)] [string]$DotNetVersion
@@ -12,7 +11,6 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
-$msixVersion = "$Version.0"
 $channel = if ([version]$Version -lt [version]"1.0.0") { "Preview" } else { "Stable" }
 
 $dependencyData = Get-Content -LiteralPath $DependencyJson -Raw | ConvertFrom-Json
@@ -78,13 +76,14 @@ foreach ($file in $primaryFiles) {
 $manifest = [ordered]@{
     schemaVersion = 1
     semanticVersion = $Version
-    msixVersion = $msixVersion
     repository = $Repository
     commitSha = $SourceSha
     buildTimeUtc = $BuildTimeUtc
     releaseChannel = $channel
     dotnetVersion = $DotNetVersion
-    packageIdentity = $PackageIdentity
+    distribution = "portable-win-x64"
+    runtimeIdentifier = "win-x64"
+    selfContained = $true
     artifacts = $hashes
 }
 $manifestPath = Join-Path $ArtifactDirectory "release-manifest.json"

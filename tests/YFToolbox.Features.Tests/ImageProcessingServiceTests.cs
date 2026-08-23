@@ -36,12 +36,38 @@ public sealed class ImageProcessingServiceTests : IDisposable
 
         Assert.True(File.Exists(target));
         Assert.True(new FileInfo(target).Length > 0);
-        var info = Image.Identify(target);
-        Assert.NotNull(info);
         if (extension == "ico")
         {
-            Assert.Equal(7, info.FrameMetadataCollection.Count);
+            using var stream = File.OpenRead(target);
+            using var reader = new BinaryReader(stream);
+            Assert.Equal(0, reader.ReadUInt16());
+            Assert.Equal(1, reader.ReadUInt16());
+            Assert.Equal(7, reader.ReadUInt16());
         }
+        else
+        {
+            Assert.NotNull(Image.Identify(target));
+        }
+    }
+
+    [Fact]
+    public async Task ConvertsLargestIcoFrameToPngWithoutACommercialCodec()
+    {
+        var sourcePng = Path.Combine(_directory, "icon-source.png");
+        var icon = Path.Combine(_directory, "multi.ico");
+        var result = Path.Combine(_directory, "icon-result.png");
+        using (var image = new Image<Rgba32>(64, 48, new Rgba32(32, 128, 220, 180)))
+        {
+            await image.SaveAsPngAsync(sourcePng, TestContext.Current.CancellationToken);
+        }
+
+        var service = new ImageProcessingService();
+        await service.ProcessAsync(sourcePng, icon, "ico", new ImageConversionOptions(), cancellationToken: TestContext.Current.CancellationToken);
+        await service.ProcessAsync(icon, result, "png", new ImageConversionOptions(), cancellationToken: TestContext.Current.CancellationToken);
+
+        var info = Image.Identify(result);
+        Assert.Equal(256, info.Width);
+        Assert.Equal(256, info.Height);
     }
 
     [Fact]

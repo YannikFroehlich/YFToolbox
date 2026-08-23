@@ -1,4 +1,5 @@
 using System.IO;
+using System.Windows.Media.Imaging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Bmp;
@@ -43,7 +44,8 @@ public sealed class ImageProcessingService : IImageProcessingService
         ValidateOptions(options);
         progress?.Report(5);
 
-        var info = Image.Identify(inputPath);
+        var isIconInput = IsIcon(inputPath);
+        var info = isIconInput ? IdentifyIcon(inputPath) : IdentifyRaster(inputPath);
         var estimatedBytes = checked((long)info.Width * info.Height * 4);
         if (!options.AllowLargeImage &&
             ((long)info.Width * info.Height > MaximumPixelsWithoutConfirmation ||
@@ -53,7 +55,7 @@ public sealed class ImageProcessingService : IImageProcessingService
         }
 
         if (Path.GetExtension(inputPath).Equals(".webp", StringComparison.OrdinalIgnoreCase) &&
-            info.FrameMetadataCollection.Count > 1)
+            info.FrameCount > 1)
         {
             throw new NotSupportedException(AppStrings.AnimatedWebpUnsupported);
         }
@@ -65,7 +67,9 @@ public sealed class ImageProcessingService : IImageProcessingService
             FileShare.Read,
             1024 * 1024,
             FileOptions.Asynchronous | FileOptions.SequentialScan);
-        using var image = await Image.LoadAsync<Rgba32>(input, cancellationToken).ConfigureAwait(false);
+        using var image = isIconInput
+            ? await LoadLargestIconFrameAsync(input, cancellationToken).ConfigureAwait(false)
+            : await Image.LoadAsync<Rgba32>(input, cancellationToken).ConfigureAwait(false);
         progress?.Report(25);
 
         image.Mutate(context =>
@@ -114,6 +118,45 @@ public sealed class ImageProcessingService : IImageProcessingService
 
         await output.FlushAsync(cancellationToken).ConfigureAwait(false);
         progress?.Report(100);
+    }
+
+    private static (int Width, int Height, int FrameCount) IdentifyRaster(string path)
+    {
+        var info = Image.Identify(path) ?? throw new InvalidDataException("The image could not be identified.");
+        return (info.Width, info.Height, info.FrameMetadataCollection.Count);
+    }
+
+    private static (int Width, int Height, int FrameCount) IdentifyIcon(string path)
+    {
+        using var stream = File.OpenRead(path);
+        var decoder = new IconBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        var largest = decoder.Frames.MaxBy(frame => (long)frame.PixelWidth * frame.PixelHeight)
+            ?? throw new InvalidDataException("The icon contains no frames.");
+        return (largest.PixelWidth, largest.PixelHeight, decoder.Frames.Count);
+    }
+
+    private static async Task<Image<Rgba32>> LoadLargestIconFrameAsync(
+        Stream input,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var decoder = new IconBitmapDecoder(input, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        var largest = decoder.Frames.MaxBy(frame => (long)frame.PixelWidth * frame.PixelHeight)
+            ?? throw new InvalidDataException("The icon contains no frames.");
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(largest));
+        await using var png = new MemoryStream();
+        encoder.Save(png);
+        png.Position = 0;
+        return await Image.LoadAsync<Rgba32>(png, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static bool IsIcon(string path)
+    {
+        Span<byte> header = stackalloc byte[4];
+        using var stream = File.OpenRead(path);
+        return stream.Read(header) == header.Length &&
+            header[0] == 0 && header[1] == 0 && header[2] == 1 && header[3] == 0;
     }
 
     private static void ValidateOptions(ImageConversionOptions options)

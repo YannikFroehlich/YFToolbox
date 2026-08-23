@@ -7,7 +7,7 @@ with their respective copyright holders.
 - FileSignatures — MIT
 - Microsoft.Extensions.* — MIT
 - Serilog and Serilog.Sinks.File — Apache-2.0
-- SixLabors.ImageSharp — Six Labors Split License (open-source use)
+- SixLabors.ImageSharp 3.x — Six Labors Split License, Apache-2.0 grant for this MIT-licensed open-source project; no license key required
 - WPF UI — MIT
 - xUnit.net and Coverlet — Apache-2.0 / MIT
 

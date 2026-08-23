@@ -11,22 +11,12 @@ on:
         description: Immutable source commit SHA
         required: true
         type: string
-    secrets:
-      SIXLABORS_LICENSE_KEY:
-        required: true
-      AZURE_CLIENT_ID:
-        required: true
-      AZURE_TENANT_ID:
-        required: true
-      AZURE_SUBSCRIPTION_ID:
-        required: true
   push:
     tags:
       - "v*.*.*"
 
 permissions:
   contents: write
-  id-token: write
 
 concurrency:
   group: yftoolbox-release-${{ inputs.source_sha || github.sha }}
@@ -35,17 +25,9 @@ concurrency:
 
 jobs:
   release:
-    name: Verify, package, sign and publish
+    name: Verify, package and publish
     runs-on: windows-2025
-    environment: release
     env:
-      PACKAGE_IDENTITY: ${{ vars.MSIX_PACKAGE_IDENTITY }}
-      PACKAGE_PUBLISHER: ${{ vars.MSIX_PUBLISHER }}
-      APPINSTALLER_BASE_URI: ${{ vars.APPINSTALLER_BASE_URI }}
-      ARTIFACT_SIGNING_ENDPOINT: ${{ vars.ARTIFACT_SIGNING_ENDPOINT }}
-      ARTIFACT_SIGNING_ACCOUNT: ${{ vars.ARTIFACT_SIGNING_ACCOUNT }}
-      ARTIFACT_SIGNING_PROFILE: ${{ vars.ARTIFACT_SIGNING_PROFILE }}
-      SixLaborsLicenseKey: ${{ secrets.SIXLABORS_LICENSE_KEY }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout immutable source
@@ -75,11 +57,6 @@ jobs:
           if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "Version must be numeric MAJOR.MINOR.PATCH." }
           if ($sourceSha -notmatch '^[0-9a-f]{40}$') { throw "Source SHA must be immutable and complete." }
           if ($actualSha -ne $sourceSha) { throw "Checked out $actualSha, expected $sourceSha." }
-          foreach ($name in @("PACKAGE_IDENTITY", "PACKAGE_PUBLISHER", "APPINSTALLER_BASE_URI", "ARTIFACT_SIGNING_ENDPOINT", "ARTIFACT_SIGNING_ACCOUNT", "ARTIFACT_SIGNING_PROFILE")) {
-            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))) {
-              throw "Protected release environment variable $name is not configured."
-            }
-          }
           $tag = "v$version"
           $tagSha = (git rev-list -n 1 "refs/tags/$tag" 2>$null)
           if ($tagSha -and $tagSha.Trim() -ne $sourceSha) {
@@ -87,7 +64,7 @@ jobs:
           }
           $buildTime = [DateTimeOffset]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-          "msix_version=$version.0" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "binary_version=$version.0" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "source_sha=$sourceSha" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "build_time=$buildTime" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
@@ -110,7 +87,7 @@ jobs:
         run: dotnet restore YFToolbox.sln --configfile NuGet.Config
 
       - name: Build release
-        run: dotnet build YFToolbox.sln --configuration Release --no-restore -p:Version="${{ steps.release.outputs.version }}" -p:AssemblyVersion="${{ steps.release.outputs.msix_version }}" -p:FileVersion="${{ steps.release.outputs.msix_version }}" -p:InformationalVersion="${{ steps.release.outputs.version }}+${{ steps.release.outputs.source_sha }}" -p:SourceRevisionId="${{ steps.release.outputs.source_sha }}" -p:BuildTimeUtc="${{ steps.release.outputs.build_time }}"
+        run: dotnet build YFToolbox.sln --configuration Release --no-restore -p:Version="${{ steps.release.outputs.version }}" -p:AssemblyVersion="${{ steps.release.outputs.binary_version }}" -p:FileVersion="${{ steps.release.outputs.binary_version }}" -p:InformationalVersion="${{ steps.release.outputs.version }}+${{ steps.release.outputs.source_sha }}" -p:SourceRevisionId="${{ steps.release.outputs.source_sha }}" -p:BuildTimeUtc="${{ steps.release.outputs.build_time }}"
 
       - name: Run unit and integration tests
         run: dotnet test YFToolbox.sln --configuration Release --no-build --no-restore
@@ -128,59 +105,28 @@ jobs:
           $dependencies | Set-Content -LiteralPath artifacts/reports/dependencies.json -Encoding utf8NoBOM
 
       - name: Publish self-contained x64 application
-        run: dotnet publish src/YFToolbox.App/YFToolbox.App.csproj --configuration Release --no-build --no-restore --runtime win-x64 --self-contained true --output artifacts/publish -p:Version="${{ steps.release.outputs.version }}" -p:AssemblyVersion="${{ steps.release.outputs.msix_version }}" -p:FileVersion="${{ steps.release.outputs.msix_version }}" -p:InformationalVersion="${{ steps.release.outputs.version }}+${{ steps.release.outputs.source_sha }}" -p:SourceRevisionId="${{ steps.release.outputs.source_sha }}" -p:BuildTimeUtc="${{ steps.release.outputs.build_time }}"
+        run: dotnet publish src/YFToolbox.App/YFToolbox.App.csproj --configuration Release --no-build --no-restore --runtime win-x64 --self-contained true --output artifacts/publish -p:Version="${{ steps.release.outputs.version }}" -p:AssemblyVersion="${{ steps.release.outputs.binary_version }}" -p:FileVersion="${{ steps.release.outputs.binary_version }}" -p:InformationalVersion="${{ steps.release.outputs.version }}+${{ steps.release.outputs.source_sha }}" -p:SourceRevisionId="${{ steps.release.outputs.source_sha }}" -p:BuildTimeUtc="${{ steps.release.outputs.build_time }}"
 
-      - name: Build MSIX and AppInstaller
-        shell: pwsh
-        run: ./build/Package-Msix.ps1 -PublishDirectory artifacts/publish -ArtifactDirectory artifacts/release -Version "${{ steps.release.outputs.version }}" -Repository "$env:GITHUB_REPOSITORY" -PackageIdentity "$env:PACKAGE_IDENTITY" -Publisher "$env:PACKAGE_PUBLISHER" -ChannelBaseUri "$env:APPINSTALLER_BASE_URI"
-
-      - name: Sign in to Azure using OIDC
-        uses: azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca # v3.0.1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Sign MSIX with Azure Artifact Signing
-        uses: azure/artifact-signing-action@c7ab2a863ab5f9a846ddb8265964877ef296ee82 # v2.0.0
-        with:
-          endpoint: ${{ env.ARTIFACT_SIGNING_ENDPOINT }}
-          signing-account-name: ${{ env.ARTIFACT_SIGNING_ACCOUNT }}
-          certificate-profile-name: ${{ env.ARTIFACT_SIGNING_PROFILE }}
-          files-folder: ${{ github.workspace }}\artifacts\release
-          files-folder-filter: msix
-          files-folder-recurse: false
-          file-digest: SHA256
-          timestamp-rfc3161: http://timestamp.acs.microsoft.com
-          timestamp-digest: SHA256
-
-      - name: Verify signature and package identity
-        shell: pwsh
-        run: ./build/Verify-Msix.ps1 -MsixPath "artifacts/release/YFToolbox-${{ steps.release.outputs.version }}-x64.msix" -ExpectedIdentity "$env:PACKAGE_IDENTITY" -ExpectedPublisher "$env:PACKAGE_PUBLISHER" -ExpectedVersion "${{ steps.release.outputs.msix_version }}"
-
-      - name: Installation smoke test
+      - name: Portable startup smoke test
         shell: pwsh
         run: |
-          $package = Resolve-Path "artifacts/release/YFToolbox-${{ steps.release.outputs.version }}-x64.msix"
+          $executable = Resolve-Path "artifacts/publish/YFToolbox.App.exe"
+          $process = Start-Process -FilePath $executable -WindowStyle Hidden -PassThru
           try {
-            Add-AppxPackage -Path $package
-            $installed = Get-AppxPackage -Name "$env:PACKAGE_IDENTITY"
-            if (-not $installed) { throw "The freshly installed package was not found." }
-            $executable = Join-Path $installed.InstallLocation "YFToolbox.App.exe"
-            $process = Start-Process -FilePath $executable -WindowStyle Hidden -PassThru
             Start-Sleep -Seconds 5
-            if ($process.HasExited -and $process.ExitCode -ne 0) {
-              throw "Application startup failed with exit code $($process.ExitCode)."
-            }
-            if (-not $process.HasExited) { Stop-Process -Id $process.Id }
+            if ($process.HasExited) { throw "Application exited early with code $($process.ExitCode)." }
           }
           finally {
-            Get-AppxPackage -Name "$env:PACKAGE_IDENTITY" | Remove-AppxPackage -ErrorAction SilentlyContinue
+            if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force }
           }
+
+      - name: Build portable archive
+        shell: pwsh
+        run: ./build/Package-Portable.ps1 -PublishDirectory artifacts/publish -ArtifactDirectory artifacts/release -Version "${{ steps.release.outputs.version }}"
 
       - name: Generate release manifest, SBOM and checksums
         shell: pwsh
-        run: ./build/New-ReleaseArtifacts.ps1 -ArtifactDirectory artifacts/release -Version "${{ steps.release.outputs.version }}" -Repository "$env:GITHUB_REPOSITORY" -SourceSha "${{ steps.release.outputs.source_sha }}" -PackageIdentity "$env:PACKAGE_IDENTITY" -DependencyJson artifacts/reports/dependencies.json -BuildTimeUtc "${{ steps.release.outputs.build_time }}" -DotNetVersion (dotnet --version)
+        run: ./build/New-ReleaseArtifacts.ps1 -ArtifactDirectory artifacts/release -Version "${{ steps.release.outputs.version }}" -Repository "$env:GITHUB_REPOSITORY" -SourceSha "${{ steps.release.outputs.source_sha }}" -DependencyJson artifacts/reports/dependencies.json -BuildTimeUtc "${{ steps.release.outputs.build_time }}" -DotNetVersion (dotnet --version)
 
       - name: Create immutable tag and complete GitHub release
         shell: pwsh
@@ -217,14 +163,3 @@ jobs:
           $prerelease = "${{ steps.release.outputs.prerelease }}"
           gh release edit $tag "--prerelease=$prerelease" --draft=false
           if ($LASTEXITCODE -ne 0) { throw "GitHub release finalization failed." }
-
-      - name: Update permanent AppInstaller channel
-        shell: pwsh
-        run: |
-          $channel = if ("${{ steps.release.outputs.prerelease }}" -eq "true") { "YFToolbox.Preview.appinstaller" } else { "YFToolbox.appinstaller" }
-          ./build/Publish-AppInstallerChannel.ps1 -Repository "$env:GITHUB_REPOSITORY" -SourceSha "${{ steps.release.outputs.source_sha }}" -ChannelFile "artifacts/release/$channel" -TargetPath "channels/$channel" -CommitMessage "chore: update $channel to ${{ steps.release.outputs.tag }} [skip release]"
-
-      - name: Sign out from Azure
-        if: always()
-        shell: pwsh
-        run: az logout

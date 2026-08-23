@@ -6,4 +6,4 @@
 - 0004 — JSON settings and pathless history
 - 0005 — Atomic and non-destructive output
 - 0006 — Git-derived semantic versioning
-- 0007 — MSIX and AppInstaller distribution
+- 0007 — Portable distribution replaces mandatory MSIX
