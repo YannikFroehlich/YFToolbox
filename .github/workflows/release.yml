@@ -63,8 +63,10 @@ jobs:
           if ($sourceSha -notmatch '^[0-9a-f]{40}$') { throw "Source SHA must be immutable and complete." }
           if ($actualSha -ne $sourceSha) { throw "Checked out $actualSha, expected $sourceSha." }
           $tag = "v$version"
-          $tagSha = (git rev-list -n 1 "refs/tags/$tag" 2>$null)
-          if ($tagSha -and $tagSha.Trim() -ne $sourceSha) {
+          $matchingTags = @(git tag --list $tag)
+          if ($LASTEXITCODE -ne 0) { throw "Existing tag inspection failed." }
+          $tagSha = if ($matchingTags.Count -gt 0) { (git rev-list -n 1 "refs/tags/$tag").Trim() } else { $null }
+          if ($tagSha -and $tagSha -ne $sourceSha) {
             throw "$tag already exists at another commit. Tags are immutable."
           }
           $buildTime = [DateTimeOffset]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
@@ -138,9 +140,11 @@ jobs:
         run: |
           $tag = "${{ steps.release.outputs.tag }}"
           $sourceSha = "${{ steps.release.outputs.source_sha }}"
-          $existingTagSha = (git rev-list -n 1 "refs/tags/$tag" 2>$null)
+          $matchingTags = @(git tag --list $tag)
+          if ($LASTEXITCODE -ne 0) { throw "Existing tag inspection failed." }
+          $existingTagSha = if ($matchingTags.Count -gt 0) { (git rev-list -n 1 "refs/tags/$tag").Trim() } else { $null }
           if ($existingTagSha) {
-            if ($existingTagSha.Trim() -ne $sourceSha) { throw "$tag points to another commit." }
+            if ($existingTagSha -ne $sourceSha) { throw "$tag points to another commit." }
           }
           else {
             git config user.name "github-actions[bot]"
@@ -152,8 +156,10 @@ jobs:
           }
 
           $files = @(Get-ChildItem -LiteralPath artifacts/release -File | ForEach-Object FullName)
-          gh release view $tag *> $null
-          if ($LASTEXITCODE -eq 0) {
+          $publishedReleases = @(gh release list --limit 1000 --json tagName | ConvertFrom-Json)
+          if ($LASTEXITCODE -ne 0) { throw "Existing release inspection failed." }
+          $releaseExists = @($publishedReleases | Where-Object { $_.tagName -eq $tag }).Count -gt 0
+          if ($releaseExists) {
             gh release upload $tag @files --clobber
             if ($LASTEXITCODE -ne 0) { throw "Release asset recovery failed." }
           }
