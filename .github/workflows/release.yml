@@ -45,7 +45,12 @@ jobs:
           CALCULATED_SHA: ${{ inputs.source_sha }}
         run: |
           $actualSha = (git rev-parse HEAD).Trim()
-          if ($env:GITHUB_EVENT_NAME -eq "workflow_call") {
+          $hasCalculatedVersion = -not [string]::IsNullOrWhiteSpace($env:CALCULATED_VERSION)
+          $hasCalculatedSha = -not [string]::IsNullOrWhiteSpace($env:CALCULATED_SHA)
+          if ($hasCalculatedVersion -xor $hasCalculatedSha) {
+            throw "Calculated version and source SHA must be supplied together."
+          }
+          if ($hasCalculatedVersion) {
             $version = $env:CALCULATED_VERSION
             $sourceSha = $env:CALCULATED_SHA
           }
