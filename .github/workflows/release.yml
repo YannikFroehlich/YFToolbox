@@ -118,10 +118,10 @@ jobs:
         shell: pwsh
         run: |
           $executable = Resolve-Path "artifacts/publish/YFToolbox.App.exe"
-          $process = Start-Process -FilePath $executable -WindowStyle Hidden -PassThru
+          $process = Start-Process -FilePath $executable -ArgumentList "--smoke-test" -WindowStyle Hidden -PassThru
           try {
-            Start-Sleep -Seconds 5
-            if ($process.HasExited) { throw "Application exited early with code $($process.ExitCode)." }
+            if (-not $process.WaitForExit(15000)) { throw "Application startup smoke test timed out." }
+            if ($process.ExitCode -ne 0) { throw "Application startup failed with code $($process.ExitCode)." }
           }
           finally {
             if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force }

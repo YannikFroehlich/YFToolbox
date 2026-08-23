@@ -12,7 +12,7 @@
                  MinWidth="880"
                  MinHeight="600"
                  WindowStartupLocation="CenterScreen"
-                 WindowBackdropType="Mica">
+                 WindowBackdropType="None">
     <ui:NavigationView x:Name="RootNavigationView"
                        PaneTitle="YF Toolbox"
                        OpenPaneLength="240"

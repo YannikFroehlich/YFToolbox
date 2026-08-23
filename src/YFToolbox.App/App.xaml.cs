@@ -25,10 +25,12 @@ namespace YFToolbox.App;
 public partial class App : System.Windows.Application
 {
     private IHost? _host;
+    private bool _isSmokeTest;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        _isSmokeTest = e.Args.Contains("--smoke-test", StringComparer.OrdinalIgnoreCase);
         var logDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "YFToolbox",
@@ -79,15 +81,24 @@ public partial class App : System.Windows.Application
             await _host.Services.GetRequiredService<ITempFileService>().CleanupStaleAsync();
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
+            if (_isSmokeTest)
+            {
+                await Dispatcher.InvokeAsync(static () => { }, DispatcherPriority.ApplicationIdle);
+                Shutdown(0);
+            }
         }
         catch (Exception exception)
         {
             Log.Fatal(exception, "YF Toolbox failed during startup.");
-            System.Windows.MessageBox.Show(
-                exception.Message,
-                "YF Toolbox",
-                System.Windows.MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            if (!_isSmokeTest)
+            {
+                System.Windows.MessageBox.Show(
+                    exception.Message,
+                    "YF Toolbox",
+                    System.Windows.MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
             Shutdown(-1);
         }
     }
@@ -106,15 +117,20 @@ public partial class App : System.Windows.Application
 
     public static void ApplyTheme(ThemePreference theme)
     {
-        if (theme == ThemePreference.System)
+        var applicationTheme = theme switch
         {
-            ApplicationThemeManager.ApplySystemTheme();
-            return;
-        }
+            ThemePreference.Dark => ApplicationTheme.Dark,
+            ThemePreference.Light => ApplicationTheme.Light,
+            _ => ApplicationThemeManager.GetSystemTheme() switch
+            {
+                SystemTheme.Dark => ApplicationTheme.Dark,
+                SystemTheme.HCWhite or SystemTheme.HCBlack or SystemTheme.HC1 or SystemTheme.HC2 =>
+                    ApplicationTheme.HighContrast,
+                _ => ApplicationTheme.Light
+            }
+        };
 
-        ApplicationThemeManager.Apply(
-            theme == ThemePreference.Dark ? ApplicationTheme.Dark : ApplicationTheme.Light,
-            WindowBackdropType.Mica);
+        ApplicationThemeManager.Apply(applicationTheme, WindowBackdropType.None);
     }
 
     private static void ApplyCulture(LanguagePreference language)
