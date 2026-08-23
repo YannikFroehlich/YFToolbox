@@ -1,9 +1,9 @@
-# ADR 0007: MSIX and AppInstaller distribution
+# ADR 0007: Portable distribution replaces mandatory MSIX
 
 Status: Accepted
 
-The supported distribution is a self-contained Windows 11 x64 MSIX. Semantic
-versions map to four-part numeric package versions by appending `.0`.
-Trusted signing is mandatory for public artifacts. Stable and preview
-AppInstaller files live at permanent HTTPS channel URLs; GitHub Release assets
-hold immutable versioned packages.
+The supported distribution is a self-contained portable Windows 11 x64 ZIP.
+MSIX scripts remain only for optional local experiments with a temporary
+self-signed certificate. Public releases do not require Azure, code-signing
+subscriptions or AppInstaller infrastructure. GitHub Release assets hold the
+immutable versioned packages, manifest, SBOM and checksums.

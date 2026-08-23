@@ -2,8 +2,9 @@
 
 Status: Accepted
 
-ImageSharp handles PNG, JPEG, WebP, BMP and ICO inspection and processing. It
-keeps non-UI image logic testable and portable across WPF views. Public
-open-source distribution must use the applicable Six Labors license and a
-Release build requires its license key. A future proprietary distribution must
-re-evaluate licensing before publication.
+ImageSharp 3.x handles PNG, JPEG, WebP and BMP processing without a license
+key. Small in-house header readers perform inspection, and Windows' built-in
+icon decoder selects the largest ICO input frame. A small writer produces
+multi-size ICO output. This keeps all V1 formats while avoiding paid services.
+A future proprietary distribution must still re-evaluate the Six Labors Split
+License before publication.

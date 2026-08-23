@@ -18,7 +18,7 @@ does not contain telemetry.
 - Two-phase batch rename with validation and best-effort rollback
 - Streaming SHA-256 and MD5 calculation
 - System, light and dark themes; German and English resources
-- Self-contained x64 MSIX and AppInstaller release channels
+- Self-contained portable Windows x64 releases as ordinary ZIP archives
 
 ## Development
 
@@ -33,10 +33,9 @@ dotnet test --configuration Debug
 dotnet run --project src/YFToolbox.App
 ```
 
-Local Debug builds use the visible version `0.1.0-dev+local`. ImageSharp
-4 requires an open-source or commercial license key for Release builds; store it
-outside the repository and expose it as the MSBuild property
-`SixLaborsLicenseKey`.
+Local Debug builds use the visible version `0.1.0-dev+local`. All required
+runtime and build dependencies work without paid subscriptions, cloud accounts
+or license keys.
 
 ## Releases
 
@@ -46,9 +45,9 @@ breaking change a major release. All other commits default to a patch, matching
 YFRemote. Add `[skip release]` to the head commit to skip publication.
 
 The release workflow checks out the immutable source SHA, builds and tests,
-publishes self-contained x64 output, creates and signs the MSIX, verifies and
-installs it, then generates an SBOM, manifest and checksums. Only after those
-checks succeed may it create the tag and GitHub Release.
+publishes self-contained x64 output, starts it in a smoke test and packages it
+as a portable ZIP, then generates an SBOM, manifest and checksums. Only after
+those checks succeed may it create the tag and GitHub Release.
 
 Repository and protected-environment setup is documented in
 `docs/release-setup.md`.

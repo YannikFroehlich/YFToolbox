@@ -8,7 +8,6 @@
     <ProjectReference Include="..\YFToolbox.Core\YFToolbox.Core.csproj" />
     <ProjectReference Include="..\YFToolbox.Application\YFToolbox.Application.csproj" />
     <PackageReference Include="FileSignatures" />
-    <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>

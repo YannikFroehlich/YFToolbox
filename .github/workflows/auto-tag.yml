@@ -63,4 +63,3 @@ jobs:
     with:
       version: ${{ needs.calculate.outputs.version }}
       source_sha: ${{ needs.calculate.outputs.source_sha }}
-    secrets: inherit

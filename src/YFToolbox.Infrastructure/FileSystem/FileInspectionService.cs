@@ -1,5 +1,4 @@
 using FileSignatures;
-using SixLabors.ImageSharp;
 using YFToolbox.Application.Contracts;
 using YFToolbox.Core.Models;
 
@@ -101,19 +100,19 @@ public sealed class FileTypeDetector : IFileTypeDetector
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var imageInfo = Image.Identify(fullPath);
+                var imageInfo = ImageHeaderInspector.Inspect(fullPath, cancellationToken);
                 width = imageInfo.Width;
                 height = imageInfo.Height;
-                frames = imageInfo.FrameMetadataCollection.Count;
-                mimeType = imageInfo.Metadata.DecodedImageFormat?.DefaultMimeType ?? mimeType;
+                frames = imageInfo.FrameCount;
+                mimeType = imageInfo.MimeType;
                 confidence = DetectionConfidence.DecoderVerified;
-                extensionMatches = MatchesExtension(extension, imageInfo.Metadata.DecodedImageFormat?.FileExtensions.FirstOrDefault(), mimeType);
+                extensionMatches = MatchesExtension(extension, imageInfo.Extension, mimeType);
             }
-            catch (UnknownImageFormatException)
+            catch (NotSupportedException)
             {
                 confidence = hasSignature ? DetectionConfidence.Signature : DetectionConfidence.ExtensionOnly;
             }
-            catch (InvalidImageContentException)
+            catch (InvalidDataException)
             {
                 inspectionError = AppErrorCode.CorruptInput;
                 confidence = hasSignature ? DetectionConfidence.Signature : DetectionConfidence.ExtensionOnly;
