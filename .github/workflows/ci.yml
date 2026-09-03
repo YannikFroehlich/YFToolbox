@@ -89,6 +89,8 @@ jobs:
         run: dotnet test tests/YFToolbox.Core.Tests/YFToolbox.Core.Tests.csproj --configuration Debug --no-restore
       - name: Feature unit tests
         run: dotnet test tests/YFToolbox.Features.Tests/YFToolbox.Features.Tests.csproj --configuration Debug --no-restore
+      - name: App unit tests
+        run: dotnet test tests/YFToolbox.App.Tests/YFToolbox.App.Tests.csproj --configuration Debug --no-restore
 
   integration-tests:
     name: Integration Tests
