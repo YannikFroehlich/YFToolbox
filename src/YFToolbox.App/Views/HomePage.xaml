@@ -15,12 +15,11 @@
             </Grid.RowDefinitions>
 
             <StackPanel>
-                <TextBlock FontSize="34" FontWeight="SemiBold" Text="YF Toolbox" />
-                <TextBlock Margin="0,6,0,0" FontSize="16" Opacity="0.72" Text="{x:Static loc:AppStrings.HomeSubtitle}" />
+                <TextBlock Style="{StaticResource YFPageTitleStyle}" Text="YF Toolbox" />
+                <TextBlock Margin="0,6,0,0" Style="{StaticResource YFMutedTextStyle}" Text="{x:Static loc:AppStrings.HomeSubtitle}" />
             </StackPanel>
 
-            <Border Grid.Row="1" Margin="0,24,0,24" Padding="36" BorderBrush="#70678BC7" BorderThickness="1"
-                    CornerRadius="14" Background="#125B8DEF">
+            <Border Grid.Row="1" Margin="0,24,0,24" Padding="36" Style="{StaticResource YFCardStyle}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.DropFilesHere}" />
                     <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Opacity="0.7" Text="{x:Static loc:AppStrings.FoldersNotProcessed}" />
@@ -28,23 +27,23 @@
                 </StackPanel>
             </Border>
 
-            <TextBlock Grid.Row="2" Margin="0,0,0,12" FontSize="20" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.QuickTools}" />
+            <TextBlock Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource YFSectionTitleStyle}" Text="{x:Static loc:AppStrings.QuickTools}" />
             <UniformGrid Grid.Row="3" Margin="0,0,0,24" Columns="3">
                 <Button Margin="0,0,10,0" Padding="18" HorizontalContentAlignment="Left" Command="{Binding OpenConverterCommand}">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.Converter}" />
+                        <TextBlock Style="{StaticResource YFCardTitleStyle}" Text="{x:Static loc:AppStrings.Converter}" />
                         <TextBlock Margin="0,6,0,0" Opacity="0.72" Text="PNG · JPG · WebP · BMP · ICO" />
                     </StackPanel>
                 </Button>
                 <Button Margin="5,0" Padding="18" HorizontalContentAlignment="Left" Command="{Binding OpenRenameCommand}">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.BatchRename}" />
+                        <TextBlock Style="{StaticResource YFCardTitleStyle}" Text="{x:Static loc:AppStrings.BatchRename}" />
                         <TextBlock Margin="0,6,0,0" Opacity="0.72" Text="{x:Static loc:AppStrings.RenameQuickDescription}" />
                     </StackPanel>
                 </Button>
                 <Button Margin="10,0,0,0" Padding="18" HorizontalContentAlignment="Left" Command="{Binding OpenUtilitiesCommand}">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.FileUtilities}" />
+                        <TextBlock Style="{StaticResource YFCardTitleStyle}" Text="{x:Static loc:AppStrings.FileUtilities}" />
                         <TextBlock Margin="0,6,0,0" Opacity="0.72" Text="{x:Static loc:AppStrings.UtilitiesQuickDescription}" />
                     </StackPanel>
                 </Button>
@@ -54,19 +53,19 @@
                 <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBlock FontSize="20" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.RecentFiles}" />
+                    <TextBlock Style="{StaticResource YFSectionTitleStyle}" Text="{x:Static loc:AppStrings.RecentFiles}" />
                     <Button Grid.Column="1" Padding="12,5" Command="{Binding ClearCommand}" Content="{x:Static loc:AppStrings.Clear}" />
                 </Grid>
                 <ItemsControl Grid.Row="1" Margin="0,12,0,0" ItemsSource="{Binding Files}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="0,0,0,8" Padding="14" BorderBrush="#405E7184" BorderThickness="1" CornerRadius="8">
+                            <Border Margin="0,0,0,8" Padding="14" Style="{StaticResource YFSubtleCardStyle}">
                                 <Grid>
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                                     <StackPanel>
                                         <TextBlock FontWeight="SemiBold" Text="{Binding File.FileName}" />
                                         <TextBlock Margin="0,4,0,0" Opacity="0.7" Text="{Binding File.FullPath}" TextTrimming="CharacterEllipsis" />
-                                        <TextBlock Margin="0,4,0,0" Foreground="#FFD67A" Text="{Binding Warning}" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="{StaticResource YFAmberBrush}" Text="{Binding Warning}" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Margin="18,0,0,0" HorizontalAlignment="Right">
                                         <TextBlock HorizontalAlignment="Right" Text="{Binding File.DisplaySize}" />
