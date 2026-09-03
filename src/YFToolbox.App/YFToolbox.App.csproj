@@ -10,7 +10,13 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\YFToolbox.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\YFToolbox.ico" />
+    <Resource Include="Assets\YFToolboxIcon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\YFToolbox.Core\YFToolbox.Core.csproj" />

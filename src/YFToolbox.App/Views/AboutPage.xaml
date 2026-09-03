@@ -4,7 +4,10 @@
       xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core">
     <Grid Margin="32">
         <StackPanel MaxWidth="620" HorizontalAlignment="Left">
-            <TextBlock Style="{StaticResource YFPageTitleStyle}" Text="YF Toolbox" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Image Width="48" Height="48" Source="/Assets/YFToolboxIcon.png" />
+                <TextBlock Margin="14,0,0,0" VerticalAlignment="Center" Style="{StaticResource YFPageTitleStyle}" Text="YF Toolbox" />
+            </StackPanel>
             <TextBlock Margin="0,8,0,28" Style="{StaticResource YFMutedTextStyle}" Text="{x:Static loc:AppStrings.AboutDescription}" />
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
