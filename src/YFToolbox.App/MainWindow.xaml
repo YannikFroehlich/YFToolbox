@@ -13,12 +13,30 @@
                  MinWidth="880"
                  MinHeight="600"
                  WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True"
                  WindowBackdropType="None">
-    <ui:NavigationView x:Name="RootNavigationView"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="YF Toolbox">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="/Assets/YFToolboxIcon.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ui:NavigationView x:Name="RootNavigationView"
+                       Grid.Row="1"
                        PaneTitle="YF Toolbox"
                        OpenPaneLength="240"
                        IsBackButtonVisible="Collapsed"
                        PaneDisplayMode="Left">
+        <ui:NavigationView.Resources>
+            <!-- Brand blue accent for the selection indicator, matching Resources/Brand.xaml's YFBlueColor. -->
+            <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#2F6FED" />
+        </ui:NavigationView.Resources>
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Home}" Icon="{ui:SymbolIcon Home24}"
                                    TargetPageType="{x:Type views:HomePage}" />
@@ -35,5 +53,6 @@
             <ui:NavigationViewItem Content="{x:Static loc:AppStrings.About}" Icon="{ui:SymbolIcon Info24}"
                                    TargetPageType="{x:Type views:AboutPage}" />
         </ui:NavigationView.FooterMenuItems>
-    </ui:NavigationView>
+        </ui:NavigationView>
+    </Grid>
 </ui:FluentWindow>
