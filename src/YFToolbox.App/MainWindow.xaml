@@ -7,6 +7,7 @@
                  xmlns:imageViews="clr-namespace:YFToolbox.Features.Images.Views;assembly=YFToolbox.Features.Images"
                  xmlns:fileViews="clr-namespace:YFToolbox.Features.Files.Views;assembly=YFToolbox.Features.Files"
                  Title="YF Toolbox"
+                 Icon="/Assets/YFToolbox.ico"
                  Width="1180"
                  Height="760"
                  MinWidth="880"
