@@ -5,7 +5,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="32" MaxWidth="820" HorizontalAlignment="Left">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
-            <TextBlock FontSize="30" FontWeight="SemiBold" Text="{x:Static loc:AppStrings.Settings}" />
+            <TextBlock Style="{StaticResource YFPageTitleStyle}" Text="{x:Static loc:AppStrings.Settings}" />
             <Grid Grid.Row="1" Margin="0,24,0,0">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="190" /><ColumnDefinition Width="420" /></Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
