@@ -11,6 +11,7 @@
     <ProjectReference Include="..\YFToolbox.Application\YFToolbox.Application.csproj" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="WPF-UI" />
   </ItemGroup>
 
 </Project>

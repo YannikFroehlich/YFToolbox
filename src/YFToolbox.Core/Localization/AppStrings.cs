@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Resources;
 
 namespace YFToolbox.Core.Localization;
@@ -131,4 +131,22 @@ public static class AppStrings
     public static string CorruptImage => Get(nameof(CorruptImage));
     public static string InsufficientDiskSpace => Get(nameof(InsufficientDiskSpace));
     public static string RetryFailed => Get(nameof(RetryFailed));
+    public static string Browse => Get(nameof(Browse));
+    public static string Appearance => Get(nameof(Appearance));
+    public static string Output => Get(nameof(Output));
+    public static string Options => Get(nameof(Options));
+    public static string SelectedFiles => Get(nameof(SelectedFiles));
+    public static string Results => Get(nameof(Results));
+    public static string Checksums => Get(nameof(Checksums));
+    public static string FileDetails => Get(nameof(FileDetails));
+    public static string RenameOptions => Get(nameof(RenameOptions));
+    public static string NoResults => Get(nameof(NoResults));
+    public static string ThemeDescription => Get(nameof(ThemeDescription));
+    public static string LanguageDescription => Get(nameof(LanguageDescription));
+    public static string OutputModeDescription => Get(nameof(OutputModeDescription));
+    public static string OutputFolderDescription => Get(nameof(OutputFolderDescription));
+    public static string CollisionPolicyDescription => Get(nameof(CollisionPolicyDescription));
+    public static string ImageDefaultsDescription => Get(nameof(ImageDefaultsDescription));
+    public static string PathlessHistoryDescription => Get(nameof(PathlessHistoryDescription));
+    public static string Privacy => Get(nameof(Privacy));
 }

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
@@ -130,7 +130,9 @@ public partial class App : System.Windows.Application
             }
         };
 
-        ApplicationThemeManager.Apply(applicationTheme, WindowBackdropType.None);
+        // MainWindow extends its content into the title bar, so the Mica backdrop is valid.
+        // WPF-UI falls back to no backdrop by itself under high contrast.
+        ApplicationThemeManager.Apply(applicationTheme, WindowBackdropType.Mica);
     }
 
     private static void ApplyCulture(LanguagePreference language)

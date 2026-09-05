@@ -1,121 +1,194 @@
 <Page x:Class="YFToolbox.Features.Images.Views.ImageConverterView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
-             AllowDrop="True"
-             Drop="OnDrop">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="32">
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
+      ScrollViewer.CanContentScroll="False"
+      AllowDrop="True"
+      DragEnter="OnDragEnter"
+      DragLeave="OnDragLeave"
+      Drop="OnDrop">
+    <Grid Margin="{StaticResource PagePadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource PageTitleText}" Text="{x:Static loc:AppStrings.Converter}" />
+
+        <ScrollViewer Grid.Row="1" Padding="0,0,12,0" VerticalScrollBarVisibility="Auto">
+          <StackPanel>
+
+        <!-- Drop target -->
+        <Grid Margin="0,20,0,0" MinHeight="96">
+            <Rectangle x:Name="DropOutline" Style="{StaticResource DropZoneOutline}" />
+            <StackPanel Margin="20,14" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <ui:SymbolIcon Margin="0,0,12,0" VerticalAlignment="Center" FontSize="22"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="ImageMultiple24" />
+                <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           Text="{x:Static loc:AppStrings.DropFilesHere}" />
+                <ui:Button Margin="20,0,0,0" VerticalAlignment="Center" Appearance="Primary"
+                           Icon="{ui:SymbolIcon FolderOpen24}" Click="OnChooseFiles"
+                           Content="{x:Static loc:AppStrings.ChooseFiles}" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Target settings -->
+        <Grid Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.TargetFormat}" />
+                <ComboBox ItemsSource="{Binding TargetFormats}" SelectedItem="{Binding TargetFormat}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.Width}" />
+                <ui:TextBox PlaceholderText="auto" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+                <TextBlock Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.Height}" />
+                <ui:TextBox PlaceholderText="auto" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Grid.Column="6">
+                <TextBlock Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.Quality}" />
+                <ComboBox ItemsSource="{Binding QualityPresets}" DisplayMemberPath="Label"
+                          SelectedValuePath="Value" SelectedValue="{Binding QualityPreset}" />
+            </StackPanel>
+            <StackPanel Grid.Column="8">
+                <TextBlock Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.Rotation}" />
+                <ComboBox ItemsSource="{Binding Rotations}" SelectedItem="{Binding Rotation}" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Files and options -->
+        <Grid Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" MinWidth="240" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Style="{StaticResource YFPageTitleStyle}" Text="{x:Static loc:AppStrings.Converter}" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource SectionHeaderText}"
+                       Text="{x:Static loc:AppStrings.SelectedFiles}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource SectionHeaderText}"
+                       Text="{x:Static loc:AppStrings.Options}" />
 
-            <Border Grid.Row="1" Margin="0,20,0,20" Padding="28" Style="{StaticResource YFCardStyle}">
-                <StackPanel HorizontalAlignment="Center">
-                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{x:Static loc:AppStrings.DropFilesHere}" />
-                    <Button Margin="0,14,0,0" Padding="18,8" Click="OnChooseFiles" Content="{x:Static loc:AppStrings.ChooseFiles}" />
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" MinHeight="260" Style="{StaticResource ListSurface}">
+                    <Grid>
+                        <TextBlock Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Style="{StaticResource CaptionText}" Text="{x:Static loc:AppStrings.NoFiles}"
+                                   Visibility="{Binding Items, Converter={StaticResource CollectionToVisibility}}" />
+                        <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding Items}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                            <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding FileName}" />
+                                            <TextBlock Margin="0,2,0,0" Style="{StaticResource CaptionText}"
+                                                       TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                                       ToolTip="{Binding FullPath}" Text="{Binding FullPath}" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                                                   Style="{StaticResource CaptionText}" Text="{Binding Dimensions}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="1" Margin="0,12,0,0"
+                            Visibility="{Binding Results, Converter={StaticResource CollectionToVisibility}, ConverterParameter=Invert}">
+                    <TextBlock Style="{StaticResource SectionHeaderText}" Text="{x:Static loc:AppStrings.Results}" />
+                    <Border Style="{StaticResource ListSurface}" Padding="12,8" MaxHeight="140">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Results}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="0,2" Style="{StaticResource CaptionText}">
+                                            <Run FontWeight="SemiBold" Text="{Binding Input.FileName, Mode=OneWay}" />
+                                            <Run Text=" — " />
+                                            <Run Text="{Binding DisplayStatus, Mode=OneWay}" />
+                                            <Run Text="{Binding Error.Message, Mode=OneWay}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" Style="{StaticResource CardSurface}">
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding LockAspectRatio}" Content="{x:Static loc:AppStrings.LockAspectRatio}" />
+                    <CheckBox Margin="0,6,0,0" IsChecked="{Binding AllowUpscale}" Content="{x:Static loc:AppStrings.AllowUpscale}" />
+                    <CheckBox Margin="0,6,0,0" IsChecked="{Binding PreserveMetadata}" Content="{x:Static loc:AppStrings.PreserveMetadata}" />
+                    <CheckBox Margin="0,6,0,0" IsChecked="{Binding FlipHorizontal}" Content="{x:Static loc:AppStrings.FlipHorizontal}" />
+                    <CheckBox Margin="0,6,0,0" IsChecked="{Binding FlipVertical}" Content="{x:Static loc:AppStrings.FlipVertical}" />
+                    <CheckBox Margin="0,6,0,0" IsChecked="{Binding AllowLargeImage}" Content="{x:Static loc:AppStrings.ConfirmLargeImages}" />
                 </StackPanel>
             </Border>
-
-            <Grid Grid.Row="2" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Margin="0,0,12,0">
-                    <TextBlock Text="{x:Static loc:AppStrings.TargetFormat}" />
-                    <ComboBox Margin="0,6,0,0" ItemsSource="{Binding TargetFormats}" SelectedItem="{Binding TargetFormat}" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Margin="0,0,12,0">
-                    <TextBlock Text="{x:Static loc:AppStrings.Width}" />
-                    <TextBox Margin="0,6,0,0" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                    <TextBlock Text="{x:Static loc:AppStrings.Height}" />
-                    <TextBox Margin="0,6,0,0" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                <StackPanel Grid.Column="3">
-                    <TextBlock Text="{x:Static loc:AppStrings.Quality}" />
-                    <ComboBox Margin="0,6,0,0" ItemsSource="{Binding QualityPresets}" DisplayMemberPath="Label"
-                              SelectedValuePath="Value" SelectedValue="{Binding QualityPreset}" />
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
-                    <ListBox ItemsSource="{Binding Items}" MinHeight="220">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="4,6">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel>
-                                        <TextBlock FontWeight="SemiBold" Text="{Binding FileName}" />
-                                        <TextBlock Opacity="0.7" Text="{Binding FullPath}" TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center" Text="{Binding Dimensions}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <ItemsControl Grid.Row="1" Margin="0,10,0,0" ItemsSource="{Binding Results}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Margin="4,2" TextWrapping="Wrap">
-                                    <Run FontWeight="SemiBold" Text="{Binding Input.FileName}" />
-                                    <Run Text=" — " />
-                                    <Run Text="{Binding DisplayStatus}" />
-                                    <Run Text=": " />
-                                    <Run Text="{Binding Error.Message}" />
-                                </TextBlock>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-                <StackPanel Grid.Column="1" Margin="24,0,0,0">
-                    <CheckBox Margin="0,0,0,8" IsChecked="{Binding LockAspectRatio}" Content="{x:Static loc:AppStrings.LockAspectRatio}" />
-                    <CheckBox Margin="0,0,0,8" IsChecked="{Binding AllowUpscale}" Content="{x:Static loc:AppStrings.AllowUpscale}" />
-                    <CheckBox Margin="0,0,0,8" IsChecked="{Binding PreserveMetadata}" Content="{x:Static loc:AppStrings.PreserveMetadata}" />
-                    <CheckBox Margin="0,0,0,8" IsChecked="{Binding FlipHorizontal}" Content="{x:Static loc:AppStrings.FlipHorizontal}" />
-                    <CheckBox Margin="0,0,0,8" IsChecked="{Binding FlipVertical}" Content="{x:Static loc:AppStrings.FlipVertical}" />
-                    <CheckBox Margin="0,0,0,12" IsChecked="{Binding AllowLargeImage}" Content="{x:Static loc:AppStrings.ConfirmLargeImages}" />
-                    <TextBlock Text="{x:Static loc:AppStrings.Rotation}" />
-                    <ComboBox Margin="0,6,0,0" ItemsSource="{Binding Rotations}" SelectedItem="{Binding Rotation}" />
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="4" Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <ProgressBar Height="6" Minimum="0" Maximum="100" Value="{Binding Progress}" />
-                    <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" Text="{Binding TransparencyWarning}" />
-                    <TextBlock Margin="0,8,0,0" Text="{Binding Status}" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Margin="20,0,0,0" Orientation="Horizontal">
-                    <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding ClearCommand}" Content="{x:Static loc:AppStrings.Clear}" />
-                    <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding CancelCommand}" Content="{x:Static loc:AppStrings.Cancel}" />
-                    <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding RetryFailedCommand}" Content="{x:Static loc:AppStrings.RetryFailed}" />
-                    <Button Padding="18,7" Command="{Binding StartCommand}" Content="{x:Static loc:AppStrings.Start}" />
-                </StackPanel>
-            </Grid>
         </Grid>
-    </ScrollViewer>
+
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Action bar -->
+        <Border Grid.Row="2" Margin="0,16,0,0" Padding="0,14,0,0" BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
+            <StackPanel>
+                <ui:InfoBar Margin="0,0,0,12" IsOpen="True" IsClosable="False" Severity="Warning"
+                            Message="{Binding TransparencyWarning}"
+                            Visibility="{Binding TransparencyWarning, Converter={StaticResource TextToVisibility}}" />
+                <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}"
+                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="0,0,16,0" Style="{StaticResource StatusText}" Text="{Binding Status}" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <ui:Button Margin="0,0,8,0" Appearance="Secondary" Icon="{ui:SymbolIcon Broom24}"
+                                   Command="{Binding ClearCommand}" Content="{x:Static loc:AppStrings.Clear}" />
+                        <ui:Button Margin="0,0,8,0" Appearance="Secondary" Icon="{ui:SymbolIcon ArrowSync24}"
+                                   Command="{Binding RetryFailedCommand}" Content="{x:Static loc:AppStrings.RetryFailed}" />
+                        <ui:Button Margin="0,0,8,0" Appearance="Secondary" Icon="{ui:SymbolIcon Dismiss24}"
+                                   Command="{Binding CancelCommand}" Content="{x:Static loc:AppStrings.Cancel}" />
+                        <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon Play24}"
+                                   Command="{Binding StartCommand}" Content="{x:Static loc:AppStrings.Start}" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Page>

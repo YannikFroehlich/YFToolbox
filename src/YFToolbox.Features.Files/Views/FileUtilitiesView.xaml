@@ -1,62 +1,118 @@
 <Page x:Class="YFToolbox.Features.Files.Views.FileUtilitiesView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
-             AllowDrop="True"
-             Drop="OnDrop">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="32">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource YFPageTitleStyle}" Text="{x:Static loc:AppStrings.FileUtilities}" />
-            <Border Grid.Row="1" Margin="0,20" Padding="22" Style="{StaticResource YFSubtleCardStyle}">
-                <Grid>
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:loc="clr-namespace:YFToolbox.Core.Localization;assembly=YFToolbox.Core"
+      ScrollViewer.CanContentScroll="False"
+      AllowDrop="True"
+      Drop="OnDrop">
+    <Grid Margin="{StaticResource PagePadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource PageTitleText}" Text="{x:Static loc:AppStrings.FileUtilities}" />
+
+        <ScrollViewer Grid.Row="1" Margin="0,20,0,0" Padding="0,0,12,0" VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="900">
+
+                <!-- Selected file -->
+                <TextBlock Style="{StaticResource SectionHeaderText}" Text="{x:Static loc:AppStrings.FileDetails}" />
+                <Border Style="{StaticResource CardSurface}" Padding="20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                            <TextBlock FontSize="16" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Text="{Binding SelectedFile.FileName, TargetNullValue={x:Static loc:AppStrings.ChooseAFile},
+                                                    FallbackValue={x:Static loc:AppStrings.ChooseAFile}}" />
+                            <TextBlock Margin="0,6,0,0" Style="{StaticResource CaptionText}"
+                                       TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                       ToolTip="{Binding SelectedFile.FullPath}" Text="{Binding SelectedFile.FullPath}" />
+
+                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal"
+                                        Visibility="{Binding SelectedFile, Converter={StaticResource NullToVisibility}, ConverterParameter=Invert}">
+                                <ui:Badge Margin="0,0,8,0" Appearance="Secondary" Content="{Binding SelectedFile.DisplaySize}" />
+                                <ui:Badge Appearance="Secondary" Content="{Binding SelectedFile.MimeType}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,14,0,0" Orientation="Horizontal"
+                                        Visibility="{Binding SelectedFile, Converter={StaticResource NullToVisibility}, ConverterParameter=Invert}">
+                                <ui:Button Margin="0,0,8,0" Appearance="Secondary" Icon="{ui:SymbolIcon Copy24}"
+                                           Command="{Binding CopyCommand}" CommandParameter="{Binding SelectedFile.FileName}"
+                                           Content="{x:Static loc:AppStrings.CopyFileName}" />
+                                <ui:Button Appearance="Secondary" Icon="{ui:SymbolIcon Copy24}"
+                                           Command="{Binding CopyCommand}" CommandParameter="{Binding SelectedFile.FullPath}"
+                                           Content="{x:Static loc:AppStrings.CopyPath}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ui:Button Grid.Column="1" VerticalAlignment="Top" Appearance="Primary"
+                                   Icon="{ui:SymbolIcon FolderOpen24}" Click="OnChooseFile"
+                                   Content="{x:Static loc:AppStrings.ChooseFiles}" />
+                    </Grid>
+                </Border>
+
+                <!-- Checksums -->
+                <TextBlock Margin="0,24,0,10" Style="{StaticResource SectionHeaderText}" Text="{x:Static loc:AppStrings.Checksums}" />
+                <Border Style="{StaticResource CardSurface}" Padding="20">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource FieldLabelText}" Text="SHA-256" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:TextBox Grid.Column="0" IsReadOnly="True" FontFamily="Cascadia Mono, Consolas, Courier New"
+                                        FontSize="12" PlaceholderText="—" Text="{Binding Sha256}" />
+                            <ui:Button Grid.Column="1" Margin="8,0,0,0" Appearance="Secondary" Icon="{ui:SymbolIcon Copy24}"
+                                       Command="{Binding CopyCommand}" CommandParameter="{Binding Sha256}"
+                                       Content="{x:Static loc:AppStrings.Copy}" />
+                        </Grid>
+
+                        <TextBlock Margin="0,16,0,6" Style="{StaticResource FieldLabelText}" Text="{x:Static loc:AppStrings.Md5Legacy}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:TextBox Grid.Column="0" IsReadOnly="True" FontFamily="Cascadia Mono, Consolas, Courier New"
+                                        FontSize="12" PlaceholderText="—" Text="{Binding Md5}" />
+                            <ui:Button Grid.Column="1" Margin="8,0,0,0" Appearance="Secondary" Icon="{ui:SymbolIcon Copy24}"
+                                       Command="{Binding CopyCommand}" CommandParameter="{Binding Md5}"
+                                       Content="{x:Static loc:AppStrings.Copy}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Action bar -->
+        <Border Grid.Row="2" Margin="0,16,0,0" Padding="0,14,0,0" BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
+            <StackPanel>
+                <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}"
+                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                <Grid Margin="0,12,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource YFCardTitleStyle}" Text="{Binding SelectedFile.FileName, TargetNullValue={x:Static loc:AppStrings.ChooseAFile}}" />
-                        <TextBlock Margin="0,6,0,0" Opacity="0.75" Text="{Binding SelectedFile.FullPath}" />
-                        <TextBlock Margin="0,6,0,0" Text="{Binding SelectedFile.DisplaySize}" />
-                        <TextBlock Margin="0,3,0,0" Text="{Binding SelectedFile.MimeType}" />
-                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                            <Button Margin="0,0,8,0" Padding="10,4" Command="{Binding CopyCommand}"
-                                    CommandParameter="{Binding SelectedFile.FileName}" Content="{x:Static loc:AppStrings.CopyFileName}" />
-                            <Button Padding="10,4" Command="{Binding CopyCommand}"
-                                    CommandParameter="{Binding SelectedFile.FullPath}" Content="{x:Static loc:AppStrings.CopyPath}" />
-                        </StackPanel>
+                    <TextBlock Grid.Column="0" Margin="0,0,16,0" Style="{StaticResource StatusText}" Text="{Binding Status}" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <ui:Button Margin="0,0,8,0" Appearance="Secondary" Icon="{ui:SymbolIcon Dismiss24}"
+                                   Command="{Binding CancelCommand}" Content="{x:Static loc:AppStrings.Cancel}" />
+                        <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon Fingerprint24}"
+                                   Command="{Binding CalculateHashesCommand}" Content="{x:Static loc:AppStrings.CalculateHash}" />
                     </StackPanel>
-                    <Button Grid.Column="1" Padding="16,8" Click="OnChooseFile" Content="{x:Static loc:AppStrings.ChooseFiles}" />
                 </Grid>
-            </Border>
-            <StackPanel Grid.Row="2">
-                <TextBlock FontWeight="SemiBold" Text="SHA-256" />
-                <Grid Margin="0,6,0,16">
-                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBox IsReadOnly="True" Text="{Binding Sha256}" />
-                    <Button Grid.Column="1" Margin="8,0,0,0" Padding="12,5" Command="{Binding CopyCommand}" CommandParameter="{Binding Sha256}" Content="{x:Static loc:AppStrings.Copy}" />
-                </Grid>
-                <TextBlock FontWeight="SemiBold" Text="{x:Static loc:AppStrings.Md5Legacy}" />
-                <Grid Margin="0,6,0,16">
-                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBox IsReadOnly="True" Text="{Binding Md5}" />
-                    <Button Grid.Column="1" Margin="8,0,0,0" Padding="12,5" Command="{Binding CopyCommand}" CommandParameter="{Binding Md5}" Content="{x:Static loc:AppStrings.Copy}" />
-                </Grid>
-                <ProgressBar Height="6" Maximum="100" Value="{Binding Progress}" />
             </StackPanel>
-            <Grid Grid.Row="3" Margin="0,18,0,0">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Status}" />
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Margin="0,0,8,0" Padding="14,7" Command="{Binding CancelCommand}" Content="{x:Static loc:AppStrings.Cancel}" />
-                    <Button Padding="18,7" Command="{Binding CalculateHashesCommand}" Content="{x:Static loc:AppStrings.CalculateHash}" />
-                </StackPanel>
-            </Grid>
-        </Grid>
-    </ScrollViewer>
+        </Border>
+    </Grid>
 </Page>
