@@ -12,9 +12,12 @@
                  Height="760"
                  MinWidth="880"
                  MinHeight="600"
+                 Background="{DynamicResource ApplicationBackgroundBrush}"
+                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                  WindowStartupLocation="CenterScreen"
                  ExtendsContentIntoTitleBar="True"
-                 WindowBackdropType="None">
+                 WindowCornerPreference="Round"
+                 WindowBackdropType="Mica">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,31 +31,33 @@
         </ui:TitleBar>
 
         <ui:NavigationView x:Name="RootNavigationView"
-                       Grid.Row="1"
-                       PaneTitle="YF Toolbox"
-                       OpenPaneLength="240"
-                       IsBackButtonVisible="Collapsed"
-                       PaneDisplayMode="Left">
-        <ui:NavigationView.Resources>
-            <!-- Brand blue accent for the selection indicator, matching Resources/Brand.xaml's YFBlueColor. -->
-            <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#2F6FED" />
-        </ui:NavigationView.Resources>
-        <ui:NavigationView.MenuItems>
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Home}" Icon="{ui:SymbolIcon Home24}"
-                                   TargetPageType="{x:Type views:HomePage}" />
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Converter}" Icon="{ui:SymbolIcon Image24}"
-                                   TargetPageType="{x:Type imageViews:ImageConverterView}" />
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.BatchRename}" Icon="{ui:SymbolIcon Rename24}"
-                                   TargetPageType="{x:Type fileViews:BatchRenameView}" />
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.FileUtilities}" Icon="{ui:SymbolIcon DocumentToolbox24}"
-                                   TargetPageType="{x:Type fileViews:FileUtilitiesView}" />
-        </ui:NavigationView.MenuItems>
-        <ui:NavigationView.FooterMenuItems>
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Settings}" Icon="{ui:SymbolIcon Settings24}"
-                                   TargetPageType="{x:Type views:SettingsPage}" />
-            <ui:NavigationViewItem Content="{x:Static loc:AppStrings.About}" Icon="{ui:SymbolIcon Info24}"
-                                   TargetPageType="{x:Type views:AboutPage}" />
-        </ui:NavigationView.FooterMenuItems>
+                           Grid.Row="1"
+                           OpenPaneLength="228"
+                           CompactPaneLength="48"
+                           FrameMargin="0"
+                           IsBackButtonVisible="Collapsed"
+                           IsPaneToggleVisible="True"
+                           PaneDisplayMode="Left">
+            <ui:NavigationView.Resources>
+                <!-- Brand blue accent for the selection indicator. -->
+                <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{StaticResource YFBlueColor}" />
+            </ui:NavigationView.Resources>
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Home}" Icon="{ui:SymbolIcon Home24}"
+                                       TargetPageType="{x:Type views:HomePage}" />
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Converter}" Icon="{ui:SymbolIcon Image24}"
+                                       TargetPageType="{x:Type imageViews:ImageConverterView}" />
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.BatchRename}" Icon="{ui:SymbolIcon Rename24}"
+                                       TargetPageType="{x:Type fileViews:BatchRenameView}" />
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.FileUtilities}" Icon="{ui:SymbolIcon DocumentToolbox24}"
+                                       TargetPageType="{x:Type fileViews:FileUtilitiesView}" />
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.Settings}" Icon="{ui:SymbolIcon Settings24}"
+                                       TargetPageType="{x:Type views:SettingsPage}" />
+                <ui:NavigationViewItem Content="{x:Static loc:AppStrings.About}" Icon="{ui:SymbolIcon Info24}"
+                                       TargetPageType="{x:Type views:AboutPage}" />
+            </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
     </Grid>
 </ui:FluentWindow>

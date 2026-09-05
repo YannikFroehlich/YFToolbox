@@ -2,10 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--
-        YF brand palette. Shared visual family with the other YF apps (e.g. YFTimeTracker):
-        a cyan -> blue -> purple gradient as the recurring brand mark, plus a small
-        accent set for status/warning text. These are additive on top of WPF-UI's
-        Light/Dark theme resources, not a replacement for them.
+        YF brand identity. Shared visual family with the other YF apps (e.g. YFTimeTracker):
+        a cyan -> blue -> purple gradient as the recurring brand mark, plus the accent set.
+
+        Identity only. Typography, surfaces and spacing live in Resources/Styles.xaml, which
+        binds them to WPF-UI's theme resources so they follow light and dark; fixed colours
+        here would not.
     -->
     <Color x:Key="YFBlueColor">#2F6FED</Color>
     <Color x:Key="YFCyanColor">#22D3EE</Color>
@@ -28,55 +30,7 @@
         <GradientStop Color="{StaticResource YFPurpleColor}" Offset="1" />
     </LinearGradientBrush>
 
-    <!-- Accent-tinted surfaces for highlighted cards (e.g. drop zones). -->
-    <SolidColorBrush x:Key="YFAccentSurfaceBrush" Color="{StaticResource YFBlueColor}" Opacity="0.08" />
-    <SolidColorBrush x:Key="YFAccentBorderBrush" Color="{StaticResource YFBlueColor}" Opacity="0.45" />
-    <SolidColorBrush x:Key="YFCardBorderBrush" Color="#5E7184" Opacity="0.35" />
-
-    <!-- Corner-radius tokens: one consistent scale instead of ad hoc per-page values. -->
-    <CornerRadius x:Key="YFCardCornerRadius">14</CornerRadius>
-    <CornerRadius x:Key="YFSubtleCardCornerRadius">10</CornerRadius>
-    <CornerRadius x:Key="YFButtonCornerRadius">8</CornerRadius>
-
-    <!-- Typography scale. -->
-    <Style x:Key="YFPageTitleStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-    </Style>
-    <Style x:Key="YFSectionTitleStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="20" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-    </Style>
-    <Style x:Key="YFMutedTextStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Opacity" Value="0.72" />
-    </Style>
-    <Style x:Key="YFCaptionStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="11" />
-        <Setter Property="Opacity" Value="0.72" />
-        <Setter Property="Foreground" Value="{StaticResource YFBlueBrush}" />
-    </Style>
-    <Style x:Key="YFCardTitleStyle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-    </Style>
-
-    <!-- Card container styles, replacing per-page inline Border colors/radii. -->
-    <Style x:Key="YFCardStyle" TargetType="Border">
-        <Setter Property="CornerRadius" Value="{StaticResource YFCardCornerRadius}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{StaticResource YFAccentBorderBrush}" />
-        <Setter Property="Background" Value="{StaticResource YFAccentSurfaceBrush}" />
-        <Setter Property="Padding" Value="28" />
-    </Style>
-    <Style x:Key="YFSubtleCardStyle" TargetType="Border">
-        <Setter Property="CornerRadius" Value="{StaticResource YFSubtleCardCornerRadius}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{StaticResource YFCardBorderBrush}" />
-        <Setter Property="Padding" Value="16" />
-    </Style>
-
-    <!-- Rounded gradient tile used for the in-app brand mark (nav pane header, title bar). -->
+    <!-- Rounded gradient tile used for the in-app brand mark. -->
     <Style x:Key="YFBrandMarkStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource YFLogoGradientBrush}" />
         <Setter Property="CornerRadius" Value="10" />

@@ -128,4 +128,22 @@
   <data name="ToolImageConverter" xml:space="preserve"><value>Bildkonverter</value></data>
   <data name="InsufficientDiskSpace" xml:space="preserve"><value>Für die temporäre und endgültige Ausgabedatei ist nicht genügend Speicherplatz frei.</value></data>
   <data name="RetryFailed" xml:space="preserve"><value>Fehlgeschlagene wiederholen</value></data>
+  <data name="Browse" xml:space="preserve"><value>Durchsuchen…</value></data>
+  <data name="Appearance" xml:space="preserve"><value>Darstellung</value></data>
+  <data name="Output" xml:space="preserve"><value>Ausgabe</value></data>
+  <data name="Options" xml:space="preserve"><value>Optionen</value></data>
+  <data name="SelectedFiles" xml:space="preserve"><value>Ausgewählte Dateien</value></data>
+  <data name="Results" xml:space="preserve"><value>Ergebnisse</value></data>
+  <data name="Checksums" xml:space="preserve"><value>Prüfsummen</value></data>
+  <data name="FileDetails" xml:space="preserve"><value>Dateidetails</value></data>
+  <data name="RenameOptions" xml:space="preserve"><value>Optionen zum Umbenennen</value></data>
+  <data name="NoResults" xml:space="preserve"><value>Noch keine Ergebnisse.</value></data>
+  <data name="ThemeDescription" xml:space="preserve"><value>Windows folgen oder helle bzw. dunkle Darstellung erzwingen.</value></data>
+  <data name="LanguageDescription" xml:space="preserve"><value>Nach dem Wechsel der Sprache ist ein Neustart erforderlich.</value></data>
+  <data name="OutputModeDescription" xml:space="preserve"><value>Legt fest, wohin verarbeitete Dateien geschrieben werden.</value></data>
+  <data name="OutputFolderDescription" xml:space="preserve"><value>Wird beim Schreiben in einen zentralen Ordner verwendet.</value></data>
+  <data name="CollisionPolicyDescription" xml:space="preserve"><value>Verhalten, wenn die Zieldatei bereits vorhanden ist.</value></data>
+  <data name="ImageDefaultsDescription" xml:space="preserve"><value>Startwerte für neue Konvertierungsaufträge.</value></data>
+  <data name="PathlessHistoryDescription" xml:space="preserve"><value>Letzte Aktionen merken, ohne Dateipfade zu speichern.</value></data>
+  <data name="Privacy" xml:space="preserve"><value>Datenschutz</value></data>
 </root>

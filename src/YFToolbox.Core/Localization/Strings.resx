@@ -128,4 +128,22 @@
   <data name="ToolImageConverter" xml:space="preserve"><value>Image converter</value></data>
   <data name="InsufficientDiskSpace" xml:space="preserve"><value>There is not enough free space for the temporary and final output.</value></data>
   <data name="RetryFailed" xml:space="preserve"><value>Retry failed</value></data>
+  <data name="Browse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="Appearance" xml:space="preserve"><value>Appearance</value></data>
+  <data name="Output" xml:space="preserve"><value>Output</value></data>
+  <data name="Options" xml:space="preserve"><value>Options</value></data>
+  <data name="SelectedFiles" xml:space="preserve"><value>Selected files</value></data>
+  <data name="Results" xml:space="preserve"><value>Results</value></data>
+  <data name="Checksums" xml:space="preserve"><value>Checksums</value></data>
+  <data name="FileDetails" xml:space="preserve"><value>File details</value></data>
+  <data name="RenameOptions" xml:space="preserve"><value>Rename options</value></data>
+  <data name="NoResults" xml:space="preserve"><value>No results yet.</value></data>
+  <data name="ThemeDescription" xml:space="preserve"><value>Follow Windows or force a light or dark appearance.</value></data>
+  <data name="LanguageDescription" xml:space="preserve"><value>A restart is required after changing the language.</value></data>
+  <data name="OutputModeDescription" xml:space="preserve"><value>Decide where processed files are written.</value></data>
+  <data name="OutputFolderDescription" xml:space="preserve"><value>Used when writing to a central folder.</value></data>
+  <data name="CollisionPolicyDescription" xml:space="preserve"><value>What happens when a target file already exists.</value></data>
+  <data name="ImageDefaultsDescription" xml:space="preserve"><value>Starting values for new conversion jobs.</value></data>
+  <data name="PathlessHistoryDescription" xml:space="preserve"><value>Remember recent actions without storing file paths.</value></data>
+  <data name="Privacy" xml:space="preserve"><value>Privacy</value></data>
 </root>
